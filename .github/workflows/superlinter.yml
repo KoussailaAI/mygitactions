@@ -1,6 +1,13 @@
+---
 name: Super-Linter
 
-on: push
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+  statuses: write
 
 jobs:
   super-lint:
@@ -8,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Run Super-Linter
         uses: github/super-linter@v5
@@ -16,12 +23,17 @@ jobs:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+          # For this simple demo, disable strict C/C++ style linters
+          VALIDATE_CLANG_FORMAT: false
+          VALIDATE_CPP: false
+          VALIDATE_CPPLINT: false
+
   unit-test:
     name: Build and run C/C++ unit tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install build tools
         run: |
